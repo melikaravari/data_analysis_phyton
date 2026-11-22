@@ -1,7 +1,5 @@
 # Data files expected by projects 1-12 and 19
 
-These files are **not included** in the repository. Put them in a folder named `data/` next to the project folders to run the scripts.
-The source of each file is listed below. TODO (author): complete the source and licence for each file before publishing.
 
 | File | Content | Rows | Period | Projects | Source |
 |---|---|---|---|---|---|
