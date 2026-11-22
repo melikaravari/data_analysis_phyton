@@ -1,0 +1,51 @@
+Sample: 2010-01-04 to 2026-07-20, 4104 days with both prices
+
+Jet fuel crack spread over Brent (USD per barrel), by year
+      mean   std   min    max
+date                         
+2010  10.6   1.5   7.0   14.3
+2011  14.6   2.3   8.3   20.7
+2012  16.7   3.4   8.6   25.1
+2013  14.1   2.7   8.8   20.5
+2014  14.2   3.0   7.1   20.6
+2015  11.6   2.8   4.9   19.4
+2016   8.9   2.1   3.5   13.5
+2017  11.2   3.5   6.7   30.7
+2018  13.8   1.8  10.2   20.1
+2019  14.6   2.6   8.9   19.8
+2020   4.5   3.6  -3.0   14.4
+2021   7.1   3.5   2.1   15.3
+2022  40.5  17.5  11.6  107.0
+2023  31.1  13.8   9.4   81.4
+2024  17.7   6.8   7.0   36.9
+2025  19.9   5.3  11.4   40.3
+2026  42.1  15.9  15.0   68.6
+Overall mean 16.5 USD/bbl; autocorrelation at lag 1: 0.982, at lag 60: 0.622
+
+Long-run relation: log(jet) = -3.544 + 0.998 * log(Brent)  (elasticity 1.00); R2 = 0.92
+(Coefficient standard errors from this step are not valid in levels regressions with trending data; used only for the equilibrium error.)
+
+(a) Symmetric error-correction model for daily jet fuel returns (%)
+  speed of adjustment gamma = -0.018 per day (t = -3.0); half-life of a deviation = 37 days
+  cumulative short-run pass-through of Brent over lag 0-5: 0.79
+  contemporaneous pass-through (dB_0): 0.62   R2 = 0.40
+
+(b) Asymmetric pass-through (Brent rises vs falls)
+  cumulative pass-through of Brent rises  (lags 0-5): 0.729
+  cumulative pass-through of Brent falls  (lags 0-5): 0.849
+  Wald test of equality: statistic 0.93, p = 0.336
+  -> 'rockets and feathers' would mean jet fuel reacts MORE strongly to rises than to falls
+
+(c) Asymmetric error correction
+  adjustment when jet fuel is ABOVE equilibrium (ECT+): -0.015 (t = -1.5)
+  adjustment when jet fuel is BELOW equilibrium (ECT-): -0.026 (t = -2.9)
+  Wald test of equality: statistic 0.39, p = 0.535
+
+Stability across subperiods
+   period  gamma (symmetric)  cum. pass-through, Brent rises  cum. pass-through, Brent falls   ECT+   ECT-
+2010-2019             -0.031                           1.059                           0.904 -0.032 -0.031
+2020-2026             -0.020                           0.613                           0.797 -0.025 -0.006
+
+Caveats: the equilibrium error u uses a full-sample cointegrating regression (so subperiod results use information from
+the whole sample); only one lag structure was tried; Brent is a crude benchmark, not the price paid by airlines;
+daily data with holiday gaps removed can shift the timing of reactions by a day.

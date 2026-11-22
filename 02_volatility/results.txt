@@ -1,0 +1,39 @@
+Sample: 2000-01-03 to 2019-08-28, 4945 trading days
+
+SPX daily return summary (%):
+count    4944.000
+mean        0.014
+std         1.198
+min        -9.470
+25%        -0.480
+50%         0.054
+75%         0.567
+max        10.957
+Skewness -0.22, excess kurtosis 8.53 (normal = 0)
+Autocorrelation of |returns| at lag 1: 0.25  -> volatility clustering
+
+In-sample comparison (lower AIC/BIC is better)
+                     model  loglik     AIC     BIC
+         GARCH(1,1) normal -6743.5 13495.0 13521.0
+      GARCH(1,1) Student-t -6634.3 13278.6 13311.1
+GJR-GARCH(1,1,1) Student-t -6546.5 13105.0 13144.1 
+
+Parameters of GJR-GARCH(1,1,1) with Student-t errors
+mu          0.0384
+omega       0.0151
+alpha[1]    0.0000
+gamma[1]    0.1940
+beta[1]     0.8899
+nu          7.2011
+gamma (asymmetry) t-stat: 8.4  -> positive gamma = bad news raises volatility more than good news
+Persistence alpha + beta + gamma/2 = 0.987
+
+Correlation between model volatility and VIX (levels): 0.90
+Mean model vol 16.7%  vs mean VIX 19.6%  (VIX is typically higher: it contains a volatility risk premium)
+
+Out-of-sample 1-day variance forecasts, 2018-01-02 to 2019-08-28 (lower is better)
+                  forecast  MSE  QLIKE
+GJR-GARCH-t (fixed params) 4.68 0.7482
+                 EWMA 0.94 4.97 0.9635
+     Rolling 250d variance 5.31 1.3248
+Note: squared returns are a noisy proxy for true variance; QLIKE is robust to that noise, MSE is dominated by crisis days.

@@ -1,0 +1,65 @@
+Raw extract: 288,127 firm-years, 31,611 firms
+1. Removed 11 duplicate firm-years (fiscal-year-end changes); kept the latest statement
+2. Fiscal years 2000-2024: removed 1,614
+3. US-incorporated firms reporting in USD (no currency mixing): removed 76,947
+4. Excluded utilities (SIC 49xx) and financial firms (SIC 6xxx), whose leverage is driven by regulation: removed 89,996
+5. Total assets of at least USD 10 million (removes tiny shells): removed 24,424
+6. Complete values for debt, PPE, EBITDA, shares, price: removed 9,929
+7. Lagged regressors available and at least 3 observations per firm: final sample 71,705 firm-years, 6,722 firms, 2001-2024 (average 10.7 years per firm)
+
+Summary statistics (winsorised ratios). 'between SD' = variation of firm averages, 'within SD' = variation over time inside firms
+          mean    std    min    50%     max  between SD  within SD
+lev      0.246  0.248  0.000  0.196   1.246       0.221      0.144
+lev_mkt  0.222  0.242  0.000  0.143   0.955       0.217      0.141
+size     6.150  2.077  2.303  6.070  13.959       1.895      0.587
+prof     0.026  0.246 -1.175  0.093   0.400       0.256      0.125
+tang     0.241  0.231  0.000  0.157   0.903       0.224      0.072
+mtb      2.079  1.611  0.510  1.548  10.776       1.338      1.042
+rd       0.066  0.131  0.000  0.004   0.755       0.140      0.057 
+
+Tangibility and size vary mostly BETWEEN firms; a firm-fixed-effects estimator uses only the within variation, so these coefficients can change a lot.
+
+Variance inflation factors (values above 5-10 signal problematic collinearity): size 1.19, prof 2.16, tang 1.11, mtb 1.14, rd 2.25
+
+Dependent variable: book leverage (debt / total assets). Coefficients with firm-clustered standard errors in parentheses.
+Significance: *** 1%, ** 5%, * 10%. Models (1)-(2) also include a missing-R&D dummy; (3)-(4) R-squared is the WITHIN R-squared.
+                     (1) Pooled OLS (2) + year, industry FE        (3) Firm FE (4) Firm + year FE
+variable                                                                                         
+Size (ln assets)   0.029*** (0.001)        0.023*** (0.001)   0.050*** (0.002)   0.027*** (0.003)
+Profitability     -0.177*** (0.013)       -0.139*** (0.014)  -0.137*** (0.011)  -0.115*** (0.012)
+Tangibility        0.224*** (0.013)        0.247*** (0.016)   0.225*** (0.018)   0.209*** (0.020)
+Market-to-book       0.003* (0.002)           0.002 (0.002)      0.000 (0.001)     -0.001 (0.001)
+R&D / assets      -0.174*** (0.026)       -0.148*** (0.027)     -0.022 (0.025)     -0.031 (0.026)
+Observations: (1) Pooled OLS 71,705, (2) + year, industry FE 71,705, (3) Firm FE 71,705, (4) Firm + year FE 71,705
+R-squared:    (1) Pooled OLS 0.128, (2) + year, industry FE 0.194, (3) Firm FE 0.062, (4) Firm + year FE 0.054 
+
+Mundlak test: are the firm averages of the regressors jointly significant when added to a random-effects-type regression? Wald chi2(5) = 39.9, p = 1.55e-07
+-> a significant result means that firm effects are correlated with the regressors, so pooled OLS / random effects are inconsistent and fixed effects are preferred.
+F-test that all firm effects are zero (model 4): F = 17.7, p < 0.001
+
+Robustness: firm and year fixed effects, coefficients with standard errors in parentheses (stars as above)
+                                               N  Size (ln assets)      Profitability       Tangibility     Market-to-book       R&D / assets
+specification                                                                                                                                
+Baseline (model 4)                         71705  0.027*** (0.003)  -0.115*** (0.012)  0.209*** (0.020)     -0.001 (0.001)     -0.031 (0.026)
+Market leverage as dependent variable      71705  0.037*** (0.003)  -0.142*** (0.009)  0.238*** (0.017)  -0.018*** (0.001)  -0.090*** (0.017)
+Two-way clustered SE (firm and year)       71705  0.027*** (0.003)  -0.115*** (0.014)  0.209*** (0.024)     -0.001 (0.001)     -0.031 (0.029)
+Only firms with assets >= USD 100 million  52924  0.027*** (0.004)  -0.140*** (0.018)  0.182*** (0.025)     -0.002 (0.001)     -0.052 (0.042)
+Fiscal years 2000-2007                     24346  0.022*** (0.006)  -0.099*** (0.019)  0.141*** (0.032)  -0.005*** (0.002)      0.007 (0.046)
+Fiscal years 2008-2015                     23393  0.032*** (0.005)  -0.085*** (0.019)  0.152*** (0.027)    -0.004* (0.002)     -0.062 (0.044)
+Fiscal years 2016-2024                     23966  0.029*** (0.006)  -0.123*** (0.017)  0.297*** (0.026)   -0.003** (0.001)     -0.032 (0.036)
+Without R&D variable                       71705  0.027*** (0.003)  -0.107*** (0.010)  0.207*** (0.020)     -0.002 (0.001)                  - 
+
+Economic magnitude (model 4): change in book leverage, in percentage points, for a one-SD change within a firm
+        variable  within SD  effect (pp of leverage)
+Size (ln assets)      0.587                     1.59
+   Profitability      0.125                    -1.44
+     Tangibility      0.072                     1.50
+  Market-to-book      1.042                    -0.15
+    R&D / assets      0.057                    -0.18
+For comparison: the standard deviation of book leverage is 24.8 pp overall and 14.4 pp within firms.
+
+Caveats: the associations are not causal (leverage and profitability are jointly determined; omitted time-varying firm factors);
+lagging the regressors reduces but does not remove simultaneity; fixed effects remove time-invariant heterogeneity only; with a lagged
+dependent variable (partial adjustment) fixed effects would suffer from Nickell bias, which this static model avoids; winsorising and the
+USD 10 million asset filter are choices; Compustat covers listed firms only, so private firms (the majority) are not represented;
+book leverage is affected by accounting rules (e.g. leases after 2019).

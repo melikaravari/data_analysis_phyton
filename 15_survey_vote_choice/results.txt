@@ -1,0 +1,57 @@
+944 respondents; share voting Dole: 42%, Clinton: 58%
+Vote by party identification (share Dole, %): PID 0: 2, PID 1: 6, PID 2: 6, PID 3: 30, PID 4: 74, PID 5: 83, PID 6: 95
+Vote by ideology (share Dole, %): 1: 6, 2: 3, 3: 7, 4: 29, 5: 57, 6: 84, 7: 74
+
+Model comparison
+          model  pseudo R2 (McFadden)  log-likelihood    AIC    BIC
+M1 demographics                 0.052          -608.0 1228.1 1257.2
+  M2 + ideology                 0.346          -419.1  852.1  886.1
+  M3 + party ID                 0.617          -245.3  506.5  545.3 
+
+Likelihood-ratio test M3 vs M2 (adding party ID): chi2(1) = 347.6, p = 0
+
+Model M3: logit coefficients and odds ratios (outcome = voted Dole)
+            coef  robust se  odds ratio  p-value
+Intercept -7.672      0.811       0.000    0.000
+age        0.009      0.007       1.009    0.227
+educ       0.046      0.080       1.048    0.561
+income     0.041      0.021       1.042    0.046
+TVnews     0.023      0.048       1.023    0.635
+logpopul  -0.088      0.037       0.916    0.018
+selfLR     0.609      0.114       1.839    0.000
+PID        1.046      0.079       2.846    0.000 
+
+Average marginal effects in M3 (change in the probability of voting Dole per one-unit increase)
+          dy/dx  Std. Err.  Pr(>|z|)
+age       0.001      0.001     0.225
+educ      0.004      0.006     0.562
+income    0.003      0.002     0.047
+TVnews    0.002      0.004     0.634
+logpopul -0.007      0.003     0.016
+selfLR    0.046      0.009     0.000
+PID       0.080      0.003     0.000 
+
+Without party ID (M2), the marginal effect of ideology is 0.176 per point, versus 0.046 once party ID is included: party ID absorbs much of the ideology association.
+
+Linearity check: ideology as 7 categories vs one linear term: LR chi2(5) = 7.2, p = 0.206
+
+Out-of-sample performance (10-fold CV); always predicting the majority class gives accuracy 0.584
+          model  cross-validated AUC  accuracy
+M1 demographics                0.634     0.628
+  M2 + ideology                0.867     0.797
+  M3 + party ID                0.952     0.905 
+
+Ordered logit: party identification (0 strong Democrat ... 6 strong Republican) on covariates
+         coef  se (ML)  odds ratio  p-value
+selfLR  1.026    0.053       2.791    0.000
+age    -0.002    0.004       0.998    0.599
+educ    0.178    0.041       1.195    0.000
+income  0.049    0.011       1.050    0.000
+TVnews -0.031    0.024       0.969    0.199
+(odds ratio > 1: higher values of the covariate are associated with higher odds of a more Republican category; ordered logit assumes proportional odds, which I did not test.)
+
+Caveats: ANES-style samples need survey weights and design-based standard errors, which are not in this extract, so the
+standard errors are too small if the design is not simple random sampling; only 1996, only respondents who voted for one of two
+candidates; ideology and party ID are measured at the same time as the vote and probably co-determined with it, so the
+coefficients are associations, not causal effects; income is coded as percentile groups; no interactions or non-linearities
+beyond the single linearity check; no treatment of missing data (the extract is complete).

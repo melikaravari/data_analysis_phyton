@@ -1,0 +1,40 @@
+VIX sample: 1990-01-02 to 2020-10-30, 7767 days
+VIX mean 19.4, median 17.4, min 9.1, max 82.7 (on 2020-03-16)
+
+ADF test log VIX: stat -5.50, p = 0.0000; VIX level: stat -6.27, p = 0.0000 (H0: unit root)
+AR(1) on log VIX: phi = 0.9827, long-run mean VIX = 18.3
+Half-life of a shock: 40 trading days (~1.9 months)
+
+Two-regime Markov-switching model on weekly log VIX (own mean and variance per regime)
+  Low-volatility regime: VIX around 14, std of log VIX 0.17, persistence 0.986, expected duration 73 weeks
+  High-volatility regime: VIX around 24, std of log VIX 0.27, persistence 0.985, expected duration 67 weeks
+  Share of weeks in the high-volatility regime (smoothed prob > 0.5): 46%
+  Average probability of the high regime, 2008-09 to 2009-06: 1.00
+  Average probability of the high regime, Mar-Apr 2020: 1.00
+  Average probability of the high regime, 2017: 0.00
+
+Daily regression: change in log VIX (x100) on positive and negative SPX returns (%), 2000-01-04 to 2019-08-28
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -0.3899      0.106     -3.674      0.000      -0.598      -0.182
+r_pos         -3.6582      0.180    -20.300      0.000      -4.011      -3.305
+r_neg         -4.7720      0.268    -17.820      0.000      -5.297      -4.247
+==============================================================================
+Test of symmetric reaction (r_pos = r_neg): difference 1.11, p = 0.0002
+R-squared 0.54. Interpretation: a 1% market fall raises VIX by about 4.8%, a 1% rise lowers it by about 3.7%.
+
+HAR coefficients, horizon 1: const 0.024, d 0.860, w 0.088, m 0.044
+HAR coefficients, horizon 22: const 0.338, d 0.512, w 0.178, m 0.194
+
+Out-of-sample forecasts of log VIX, test period 2010-01-01 to 2020-10-30 (lower is better)
+ horizon (days)                            model  RMSE (log VIX)    MAE
+              1                      Random walk          0.0787 0.0553
+              1                            AR(1)          0.0784 0.0551
+              1 HAR (daily, weekly, monthly avg)          0.0782 0.0548
+             22                      Random walk          0.2700 0.1925
+             22                            AR(1)          0.2562 0.1850
+             22 HAR (daily, weekly, monthly avg)          0.2526 0.1823
+
+Caveats: parameters are estimated once on the training period (no rolling re-estimation); no formal test of equal
+forecast accuracy; the VIX is a risk-neutral measure, so forecasts of the VIX are not forecasts of realised volatility.

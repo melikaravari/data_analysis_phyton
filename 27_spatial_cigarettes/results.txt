@@ -1,0 +1,41 @@
+48 states in the cigarette data, years [np.int64(1985), np.int64(1995)]; 52 polygons in the map file
+Contiguity: 48 states, Queen neighbours per state: mean 4.5, min 1, max 8; islands (states without neighbours): 0
+
+1985: Moran's I of ln(packs per capita) = 0.255 (permutation p = 0.0034); of ln(real price) = 0.175 (p = 0.0251)
+1995: Moran's I of ln(packs per capita) = 0.291 (permutation p = 0.0011); of ln(real price) = 0.358 (p = 0.0002)
+A positive Moran's I means that neighbouring states have similar values.
+
+Local clusters of cigarette consumption, 1995 (LISA, 5% pseudo-p-value, no multiple-testing correction)
+  High-High: KY, ME, OH, TN, VA
+  Low-Low: AZ, CO, ID, NV, NM, OR, UT
+  High-Low: WY
+  Low-High: IL
+
+OLS, 1995: ln(packs per capita) on ln(real price) and ln(real income)
+  price elasticity -1.41 (SE 0.25); income elasticity 0.34 (SE 0.23); R2 0.43, n = 48
+  Moran's I of the OLS residuals: 0.291 (p = 0.001)
+  LM-lag test: 5.43 (p = 0.020); LM-error test: 8.15 (p = 0.004); robust LM-lag 0.00 (p = 0.946); robust LM-error 2.73 (p = 0.099)
+  (Rule of thumb: if only one of the robust tests is significant, choose that model; the OLS residual test says whether any spatial model is needed.)
+
+Spatial models, 1995 (lower AIC is better; the AIC of the spreg OLS and ML models is computed on the same likelihood basis)
+                      model  price elasticity    SE         spatial parameter  log-likelihood   AIC
+                        OLS            -1.407 0.251                         -            13.8 -21.7
+SLX (add neighbours' price)            -1.475 0.278 W x price: 0.24 (SE 0.40)            14.0 -20.1
+     SAR (spatial lag of y)            -1.290 0.242       rho: 0.29 (SE 0.15)            16.0 -23.9
+        SEM (spatial error)            -1.399 0.237    lambda: 0.47 (SE 0.15)            17.5 -29.0
+Best AIC: SEM (spatial error). The spatial dependence is better described as correlated unobserved factors across neighbours (spatial error) than as a direct spillover of consumption. The neighbours' price coefficient in the SLX model has t = 0.6, so there is no clear evidence of cross-border shopping effects with this sample of 48 states.
+
+SAR effect decomposition (average effects of a 1% change in the variable in all states / in one state's neighbours)
+      variable  direct  indirect (spillover)  total
+ ln real price  -1.319                -0.503 -1.823
+ln real income   0.339                 0.129  0.469
+The indirect effect is the effect on a state's consumption of changes in the price in other states, passed through the spatial lag. It is conditional on the SAR model, which does not fit best (see the AIC); rho is only moderately precise.
+
+Moran's I of residuals: OLS 0.291, SLX 0.299 (p = 0.001)
+
+SLX 1985: own price -1.13 (SE 0.27), neighbours' price -0.06 (SE 0.48)
+A positive and significant neighbour-price coefficient would fit cross-border shopping (residents buy more at home when neighbours are more expensive); in both years it is small and imprecise.
+
+Caveats: 48 observations per year, so spatial parameters are imprecise; the cross-section is not a causal design (prices and taxes are set by states that
+differ in unobserved ways, such as tobacco-growing states with low taxes); a panel with state fixed effects would be better; the results depend on the
+Queen contiguity weight matrix (distance-based weights could differ); LISA p-values are not corrected for multiple testing; the data are from 1985 and 1995.

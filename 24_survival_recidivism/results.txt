@@ -1,0 +1,61 @@
+432 men; 114 re-arrested within 52 weeks (26%), 318 censored at 52 weeks (74%)
+Financial aid group: 216; control group: 216
+
+Balance of covariates by treatment group (randomisation should balance them)
+       age  race  wexp   mar  paro  prio
+fin                                     
+0    24.22  0.86  0.57  0.13  0.62  2.99
+1    24.97  0.90  0.57  0.11  0.61  2.98 
+
+Share still not re-arrested at 52 weeks: aid 77.8%, no aid 69.4% (difference 8.3 percentage points)
+Log-rank test: chi2 = 3.84, p = 0.050
+Restricted mean time without re-arrest over the 52 weeks: aid 46.9 weeks, no aid 44.8 weeks; difference 2.04 weeks (bootstrap 95% CI -0.33 to 4.56)
+
+Cox models: hazard ratio of re-arrest for the aid group (values below 1 = lower hazard)
+          model  hazard ratio (aid)       95% CI     p
+       Aid only                0.69 [0.48, 1.00] 0.052
+With covariates                0.68 [0.47, 1.00] 0.047
+
+Cox model with covariates
+           hazard ratio  lower  upper      p
+covariate                                   
+fin               0.684  0.470  0.996  0.047
+age               0.944  0.904  0.986  0.009
+race              1.369  0.748  2.503  0.308
+wexp              0.861  0.568  1.305  0.480
+mar               0.648  0.307  1.370  0.256
+paro              0.919  0.626  1.348  0.665
+prio              1.096  1.036  1.159  0.001
+Concordance (in-sample) 0.640; likelihood-ratio test of the whole model: p < 0.001
+
+Randomisation makes the two hazard ratios for aid similar: covariates do not confound the effect but add precision. Each additional prior conviction raises the hazard, 
+and being older at release lowers it.
+
+Test of the proportional-hazards assumption (Schoenfeld residuals; p < 0.05 = evidence the effect changes over time)
+      test_statistic      p  -log2(p)
+age           11.453  0.001    10.453
+fin            0.015  0.902     0.148
+mar            0.709  0.400     1.323
+paro           0.134  0.714     0.486
+prio           0.019  0.891     0.167
+race           1.426  0.232     2.106
+wexp           7.315  0.007     7.192
+Covariates with evidence against proportional hazards (p < 0.05): age, wexp. The treatment variable (fin) shows no sign of non-proportionality. I did not stratify or add time interactions for the others, so their hazard ratios are averages over the follow-up.
+
+Does the effect of the aid differ by subgroup? Interactions added one at a time to the Cox model
+                   effect modifier  interaction aid x modifier (log hazard)     p
+prior convictions (per conviction)                                   -0.072 0.200
+         age at release (per year)                                   -0.089 0.049
+             prior work experience                                    0.024 0.950
+                         on parole                                    0.723 0.068
+Four tests were run; a single small p-value among them would not be convincing, and none is a pre-specified hypothesis.
+
+Weibull AFT model: time ratio for aid = 1.31 (95% CI [1.00, 1.72]): aid multiplies the time to re-arrest by this factor; Weibull shape = 1.40 (> 1 means the hazard rises over time).
+(Only 26% of the men are re-arrested within the follow-up, so the model says little about the time after week 52.)
+
+5-fold cross-validated concordance of the Cox model: 0.602 (std 0.031); 0.5 = no discrimination, 1 = perfect. The model ranks
+who is re-arrested earlier only modestly better than chance.
+
+Caveats: the aid group received an offer, so these are intention-to-treat effects (not everyone may have received or used the aid); the follow-up is only
+one year, with 74% censored; re-arrest is a measure of detected crime, not of offending; the 1970s Maryland sample of men may not generalise; the original
+study also recorded weekly employment, which is not in this version and would allow an analysis of the mechanism (aid may reduce employment).

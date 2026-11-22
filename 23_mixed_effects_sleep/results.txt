@@ -1,0 +1,42 @@
+180 observations, 18 subjects, days 0-9; mean reaction time 257 ms at day 0, 351 ms at day 9
+
+Estimated slope (ms per day) from approaches that ignore or partly respect the grouping
+  Pooled OLS, naive SE:           10.47 (SE 1.24, 95% CI 8.02-12.91)
+  Pooled OLS, cluster-robust SE:  10.47 (SE 1.55, 95% CI 7.43-13.51)
+  Two-stage (mean of the 18 individual slopes): 10.47 (SE 1.55, 95% CI 7.21-13.73)
+  Individual slopes range from -2.9 to 21.8 ms/day (SD 6.6); 1 of 18 people show a negative slope
+
+The naive OLS standard error is too small because observations from the same person are not independent (the intercepts differ a lot between people).
+
+Mixed models (REML)
+model             Random intercept  Random intercept + slope
+intercept                   251.41                    251.41
+slope                        10.47                     10.47
+slope SE                      0.80                      1.55
+SD intercept                 37.12                     24.74
+SD residual                  30.99                     25.59
+SD slope                       NaN                      5.92
+corr(int, slope)               NaN                      0.07 
+
+Fixed effect of one more day without sleep (random-slope model): 10.47 ms/day, 95% CI [7.44, 13.50]
+-> the interval is about 1.2 times as wide as the naive OLS interval; the point estimate is the same as OLS here because the design is balanced.
+
+Likelihood-ratio tests (ML; p-values use the boundary-corrected chi-square mixtures)
+  random intercept vs no random effect:        LR = 106.2, p < 0.001
+  random intercept + slope vs random intercept: LR = 42.1, p < 0.001
+  AIC: OLS 1904, random intercept 1802, random intercept + slope 1764
+
+Shrinkage: the mixed model pulls individual slopes toward the average; the sum of absolute deviations from the mean slope is 81% of the no-pooling value (SD of slopes 6.6 -> 5.5 ms/day)
+
+Out-of-sample prediction of days 5-9 from the data of days 0-4 (RMSE in ms)
+  Pooled OLS (everyone gets the same line):     58.8
+  No pooling (separate line for each person):   57.4
+  Mixed model (random intercept + slope):       51.1
+With only 5 observations per person, the individual lines are noisy, and the mixed model compromises between the group and the individual.
+
+Residual diagnostics (random-slope model): residual SD 23.5 ms; Shapiro-Wilk p < 0.001; skewness 0.17; the spread of the data grows over the days (SD of reaction times 32 -> 67 ms), which the constant residual variance does not capture; this is mostly due to the random slopes.
+
+Caveats: 18 people, all professional drivers, so the variance parameters are imprecise and the findings may not apply to others; a linear trend over
+days is assumed (the early days may include training effects and the late days may saturate); residual variance is assumed constant and errors
+independent within a person (no autocorrelation structure was fitted); the random effects are assumed normal; statsmodels' MixedLM does not provide
+Kenward-Roger or Satterthwaite degrees of freedom, so Wald intervals are slightly too narrow in such a small sample.

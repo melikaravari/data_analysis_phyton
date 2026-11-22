@@ -1,0 +1,67 @@
+======================================================================
+PART A: enzyme kinetics (Puromycin data)
+======================================================================
+23 observations: treated 12, untreated 11; concentrations [0.02, 0.06, 0.11, 0.22, 0.56, 1.1] ppm
+
+Separate Michaelis-Menten fits (rate = Vmax * conc / (Km + conc)); Vmax in counts/min^2, Km in ppm
+state                            treated       untreated
+n                                     12              11
+Vmax                               212.7           160.3
+Vmax 95% CI (asymptotic)      [197, 228]      [146, 175]
+Vmax 95% CI (bootstrap)       [202, 227]      [150, 173]
+Km                                 0.064           0.048
+Km 95% CI (asymptotic)    [0.046, 0.083]  [0.030, 0.065]
+Km 95% CI (bootstrap)     [0.050, 0.079]  [0.034, 0.061] 
+
+Joint models (all 23 observations)
+                          model  parameters    RSS   AIC
+M0: no effect (common Vmax, Km)           2 7277.0 136.4
+          M1: only Vmax differs           3 2241.0 111.3
+            M2: only Km differs           3 4815.0 128.9
+                M3: both differ           4 2055.0 111.3
+F-test M0 vs M1: F = 44.94, p = 0.0000
+F-test M1 vs M3: F = 1.72, p = 0.2056
+F-test M2 vs M3: F = 25.52, p = 0.0001
+
+Lineweaver-Burk linearisation versus direct nonlinear least squares
+    state  Vmax (Lineweaver-Burk)  Km (Lineweaver-Burk)  Vmax (nonlinear LS)  Km (nonlinear LS)
+  treated                   195.8                 0.048                212.7              0.064
+untreated                   143.4                 0.031                160.3              0.048
+The double-reciprocal transform magnifies the error at low concentrations, so its estimates are less reliable; nonlinear LS is preferred.
+
+======================================================================
+PART B: chemometrics (wine data)
+======================================================================
+178 wines, 13 chemical variables, cultivars: class_0: 59, class_1: 71, class_2: 48
+Variance ranges over a factor of 6402548 before scaling (proline dominates unscaled data).
+
+PCA on autoscaled data: cumulative explained variance (%) for 1..5 components: 36.2, 55.4, 66.5, 73.6, 80.2
+Largest loadings: PC1 flavanoids, total_phenols, od280/od315_of_diluted_wines; PC2 color_intensity, alcohol, proline
+Adjusted Rand index of cultivar vs 3-cluster k-means in the full space: 0.897; Ward hierarchical: 0.790
+
+Outlier diagnostics (3-component PCA model): T2 limit (95%, F-distribution) = 8.1, Q limit (empirical 95th percentile) = 11.6
+Wines above the T2 limit: 5, above the Q limit: 9, either: 14 (about 5% each is expected by construction)
+Most extreme by T2 (row, T2, cultivar): (121, 20.1, class_1), (59, 18.4, class_1), (25, 10.6, class_0)
+
+Cultivar classification, 5-fold cross-validation repeated 10 times
+                 classifier  mean CV accuracy  std over folds
+                        LDA             0.987           0.016
+      PLS-DA (2 components)             0.979           0.019
+                  SVM (RBF)             0.981           0.021
+                kNN (k = 5)             0.962           0.026
+kNN (k = 5) WITHOUT scaling             0.706           0.061
+(The unscaled kNN shows why autoscaling matters in chemometrics: proline's large numbers dominate the distance.)
+
+PLS-DA VIP scores (VIP > 1 = more important than average): top 6
+alcohol                         1.44
+color_intensity                 1.38
+proline                         1.37
+od280/od315_of_diluted_wines    1.08
+flavanoids                      1.08
+hue                             1.05
+6 of 13 variables have VIP > 1.
+
+Caveats: (A) only 23 observations and no replicate structure; a heteroskedastic error (variance growing with rate) is plausible and was
+not modelled; confidence intervals come from asymptotic and residual-bootstrap methods that can be inaccurate at this sample size.
+(B) the wines all come from one region and three cultivars, so classification accuracy will not transfer to other settings; the outlier
+limits are approximate; PLS components were fixed at 2 rather than tuned; VIP is a heuristic.

@@ -1,0 +1,42 @@
+60 speeches, 1789-2025, 36 different presidents; 140,987 words in total
+
+Descriptives: median speech length 2116 words (shortest 135 in 1793, longest 8463 in 1841); median sentence length 27 words
+
+Linear time trends (robust HC3 standard errors)
+                       measure  change per decade          95% CI     p    R2  mean in 1789-1850  mean since 1950
+              words per speech            -21.228 [-68.86, 26.41] 0.382 0.012           2590.250         2015.316
+            words per sentence             -1.353  [-1.67, -1.03] 0.000 0.666             43.852           20.177
+Flesch-Kincaid grade (approx.)             -0.636  [-0.77, -0.50] 0.000 0.703             20.964            9.685
+ lexical diversity (MATTR-500)             -0.001  [-0.00, -0.00] 0.026 0.082              0.509            0.492
+Sentences became much shorter: about 44 words on average in 1789-1850 versus 20 since 1950 (-1.4 words per decade in a linear fit), and the approximate reading grade fell from 21 to 10. Speech length shows no significant linear trend (p = 0.38; a few very long early speeches), and lexical diversity is nearly flat (0.509 to 0.492). Linear fits are rough descriptions, not models of the process.
+
+Mean sentence length by era (words): 1789-1850 44, 1853-1900 32, 1901-1950 24, 1953-2000 21, 2001-2025 19
+
+Most distinctive words by era (z-score of the weighted log-odds ratio against all other eras; |z| > 1.96 is conventionally large)
+  1789-1850 (16 speeches): union (4.2), powers (4.2), foreign (3.5), state (3.5), measures (3.4), limits (3.1), duties (3.0), general (3.0)
+  1853-1900 (12 speeches): constitution (3.7), laws (3.6), question (3.1), partisan (3.0), public (2.9), slavery (2.8), states (2.7), shall (2.6)
+  1901-1950 (13 speeches): business (4.0), conditions (3.6), industrial (3.6), economic (3.4), international (3.4), civilization (3.2), wish (2.9), leadership (2.7)
+  1953-2000 (12 speeches): world (6.0), let (5.7), new (5.1), help (4.2), century (3.9), america (3.9), man (3.6), today (3.5)
+  2001-2025 (7 speeches): america (6.1), thank (5.2), americans (4.0), story (3.9), jobs (3.2), today (3.1), going (2.9), nation (2.8)
+
+683 text chunks of about 8 sentences
+Topic coherence (UMass, higher/less negative is better) by number of topics: k = 4: -1.52, k = 6: -1.51, k = 8: -1.59, k = 10: -1.69, k = 12: -1.72
+Using k = 8 topics. Top words and average share per era:
+  T1: shall, citizens, duties, fellow, country, office, public, confidence  | share by era (%): 21, 15, 8, 2, 3
+  T2: new, america, world, american, nation, work, century, land  | share by era (%): 2, 5, 12, 25, 27
+  T3: president, vice, today, thank, day, america, years, moment  | share by era (%): 3, 4, 5, 13, 21
+  T4: states, union, constitution, state, powers, united, rights, power  | share by era (%): 40, 29, 7, 3, 4
+  T5: freedom, men, free, know, life, liberty, faith, man  | share by era (%): 7, 8, 22, 21, 22
+  T6: peace, nations, world, war, peoples, seek, international, justice  | share by era (%): 9, 7, 20, 14, 5
+  T7: let, america, god, responsibility, faith, dream, bless, help  | share by era (%): 3, 5, 5, 18, 13
+  T8: public, revenue, congress, business, tariff, necessary, national, money  | share by era (%): 14, 27, 21, 3, 5
+(Topic names are my interpretation of the word lists; shares are rows of eras 1789-1850, 1853-1900, 1901-1950, 1953-2000, 2001-2025.)
+
+Predicting the year from the words (60 speeches, leave-one-out): mean absolute error 20.4 years (always guessing the median year: 60.0); cross-validated R2 = 0.84
+Words most associated with later speeches: americans, today, america, thank, god, unity, promise, dream, new, help
+Words most associated with earlier speeches: knowingly, entertain, functions, shall, express, reposed, present, measures, punishment, witnesses
+
+Caveats: 60 speeches is a small corpus; the speeches are written for different audiences and media; stop-word removal and the bag-of-words
+representation ignore word order and meaning; topic models are sensitive to preprocessing and k, and topic labels are subjective; the readability
+formula and syllable counter are approximations designed for modern English; the year-prediction model may partly learn the era of a few memorable
+events (wars, crises) rather than general language change.

@@ -1,0 +1,98 @@
+Sample: 2010-01-01 to 2026-07-20, 4317 rows
+Missing values per column:
+ BRENT      131
+WTI        168
+HH         147
+JETFUEL    171 
+
+Non-positive prices set to missing: 1 (WTI, 2020-04-20)
+
+Rows after keeping only days with all four prices: 4099
+
+ADF test, log prices (H0: unit root)
+  series  ADF stat  p-value
+  BRENT     -2.89   0.0470
+    WTI     -2.99   0.0354
+     HH     -4.22   0.0006
+JETFUEL     -2.43   0.1328 
+
+ADF test, log returns (H0: unit root)
+  series  ADF stat  p-value
+  BRENT    -12.21      0.0
+    WTI    -12.60      0.0
+     HH    -19.31      0.0
+JETFUEL    -12.52      0.0 
+
+Johansen trace test, Brent / WTI / jet fuel (5 lagged differences, constant)
+Johansen cointegration test using trace test statistic with 5% significance level
+=====================================
+r_0 r_1 test statistic critical value
+-------------------------------------
+  0   3          82.32          29.80
+  1   3          35.68          15.49
+  2   3          5.839          3.841
+------------------------------------- 
+
+Selected cointegration rank at 5%: 3
+
+First cointegrating vector (normalised on Brent):
+ BRENT      1.000
+WTI       -1.113
+JETFUEL    0.019 
+
+Engle-Granger cointegration tests (H0: no cointegration)
+           pair  EG stat  p-value
+    BRENT ~ WTI    -5.16   0.0001
+BRENT ~ JETFUEL    -3.99   0.0075
+  WTI ~ JETFUEL    -4.27   0.0029
+     BRENT ~ HH    -3.90   0.0100 
+
+Johansen trace test by subperiod (Brent / WTI / jet fuel): selected rank
+  2010-2019: rank 2
+  2020-2026: rank 2
+
+VECM(5 lagged differences, rank 2) on log Brent, WTI, jet fuel
+Cointegrating vectors beta (columns = vectors; statsmodels normalises the first two rows to the identity):
+         vector 1  vector 2
+BRENT       1.000    -0.000
+WTI         0.000     1.000
+JETFUEL    -0.926    -0.849
+Adjustment coefficients alpha (rows = equations) with t-values:
+         vector 1  vector 2  t (vector 1)  t (vector 2)
+BRENT      -0.017     0.008        -1.960         0.933
+WTI         0.021    -0.031         2.296        -3.568
+JETFUEL     0.013    -0.003         1.539        -0.320
+Reading: a significant negative alpha on a vector means that equation reacts by moving back toward equilibrium.
+
+VAR lag selection
+  VAR Order Selection (* highlights the minimums)  
+==================================================
+       AIC         BIC         FPE         HQIC   
+--------------------------------------------------
+0        8.855       8.861       7010.       8.857
+1        8.751       8.782       6317.       8.762
+2        8.714       8.769       6085.       8.733
+3        8.633       8.713       5612.       8.661
+4        8.599      8.704*       5425.       8.636
+5        8.580       8.710       5326.       8.626
+6        8.559       8.714       5215.       8.614
+7        8.555       8.735       5195.       8.619
+8        8.535       8.739       5090.      8.607*
+9        8.536       8.764       5094.       8.617
+10      8.528*       8.781      5052.*       8.617
+-------------------------------------------------- 
+
+Fitted VAR(4) on returns (lag chosen by BIC)
+
+Granger causality (H0: row does NOT Granger-cause the other variables)
+  cause  F-stat  p-value
+  BRENT    4.62   0.0000
+    WTI   32.36   0.0000
+     HH    0.38   0.9724
+JETFUEL   10.36   0.0000 
+
+Forecast error variance decomposition of jet fuel returns, 10-day horizon (%):
+BRENT      42.1
+WTI         7.3
+HH          0.0
+JETFUEL    50.6

@@ -1,0 +1,15 @@
+pandas
+numpy
+scipy
+statsmodels
+arch
+scikit-learn
+matplotlib
+linearmodels
+lifelines
+rdrobust
+geopandas
+libpysal
+esda
+spreg
+nltk

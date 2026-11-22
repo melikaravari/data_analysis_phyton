@@ -1,0 +1,64 @@
+28867 respondents, 20 survey years (1978-2016); vocabulary score missing for 1348 (4.7%)
+Vocabulary (words correct out of 10): mean 6.00, SD 2.11
+
+Analysis sample (no missing values in the variables used): 27360 respondents; foreign-born 8.6%; women 57%
+
+Simple regression: one more year of education is associated with 0.33 more words correct (95% CI 0.33-0.34); R2 = 0.23; in SD units: 0.16 SD per year
+
+Mean vocabulary by education group
+           mean   std  count  95% CI half-width
+educGroup                                      
+<12 yrs    4.48  1.98   5264               0.05
+12 yrs     5.63  1.83   8259               0.04
+13-15 yrs  6.23  1.79   6942               0.04
+16 yrs     7.13  1.83   3814               0.06
+>16 yrs    7.67  1.88   3081               0.07
+
+Linearity of education: F-test of education as 20 categories vs a linear term: F = 15.1, p = 2.5e-49 (R2 0.229 linear vs 0.237 categorical: the departure is statistically clear but small in size)
+
+Nested OLS models, HC3 robust standard errors
+                                model    R2      AIC
+                         M1 education 0.229 111254.0
+M2 + age, age^2, gender, foreign-born 0.259 110164.0
+           M3 + survey year (decades) 0.262 110043.0
+                M4 + education x year 0.266 109903.0
+        M5 + education x foreign-born 0.269 109798.0 
+
+Model M5 (coefficients in words correct out of 10; educ12 = years of education minus 12; decade = years since 1997 divided by 10)
+                 coef  ci low  ci high       p
+Intercept       5.679   5.637    5.720  <0.001
+educ12          0.365   0.357    0.373  <0.001
+age10           0.189   0.175    0.203  <0.001
+I(age10 ** 2)  -0.036  -0.044   -0.029  <0.001
+female          0.150   0.107    0.193  <0.001
+foreign        -0.695  -0.794   -0.595  <0.001
+decade         -0.084  -0.105   -0.063  <0.001
+educ12:decade  -0.031  -0.038   -0.025  <0.001
+educ12:foreign -0.107  -0.133   -0.082  <0.001 
+
+Effect sizes in SD units: foreign-born gap -0.33 SD, gender gap (women - men) 0.07 SD, change per decade -0.040 SD
+The age profile is a quadratic with its peak at about age 71 (cross-sectional: age, birth cohort and survey year cannot be separated in a linear model).
+
+Robustness: binomial logit (each of the 10 words is a correct/incorrect trial) vs OLS - same signs and significance?
+      term  OLS coef (words)    OLS p  binomial odds ratio binomial p
+    educ12             0.348        0                1.167          0
+    female             0.152 5.62e-12                1.065    8.6e-11
+   foreign            -0.807 3.27e-59                0.708   2.87e-58
+    decade            -0.070 7.01e-11                0.966    5.8e-14
+educ12_dec            -0.038 4.15e-29                0.982   5.63e-27 
+
+Is a missing vocabulary score related to the covariates? Logit for 'vocabulary missing' (odds ratios)
+           odds ratio       p
+Intercept        0.04  <0.001
+educ12           0.83  <0.001
+age10            1.23  <0.001
+female           0.96   0.451
+foreign          1.94  <0.001
+decade           0.79  <0.001
+(Missingness is related to some covariates, so complete-case results may be biased; the size of the missing share is small.)
+
+Caveats: the GSS is a complex survey; the sampling weights, strata and clusters are not in this extract, so the standard errors
+assume simple random sampling and are too small, and the descriptive means are not exactly population estimates; a test with 10
+items has a ceiling and floor; vocabulary is an imperfect proxy for cognitive ability and depends on language background;
+the cross-sectional comparisons of age groups mix age and cohort; education is partly a consequence of ability, so the education
+coefficient is not the causal effect of schooling; the 'foreign-born' variable does not capture time in the US or first language.

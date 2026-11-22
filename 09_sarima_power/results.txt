@@ -1,0 +1,51 @@
+Daily average price, 2019-01-01 to 2026-07-22, 2760 days (EUR/MWh)
+Mean price by weekday (Mon..Sun): 101, 107, 106, 104, 98, 81, 69
+
+Training: 2019-01-01 to 2024-12-31 (2192 days); test: 2025-01-01 to 2026-07-22 (568 days)
+
+ADF (H0 unit root) on levels: stat -2.88, p = 0.048; KPSS (H0 stationary): stat 1.83, p = 0.010
+ADF on the 7-day seasonal difference: stat -11.07, p = 0.0000
+The series is persistent (the 2021-22 energy crisis dominates) and has a strong weekly pattern, so both a regular and a
+seasonal difference are candidates; the information criterion below decides.
+
+SARIMA candidates (training data), best five by AIC
+    order     seasonal     AIC     BIC
+(1, 1, 2) (0, 1, 1, 7) 21038.7 21067.2
+(1, 1, 2) (1, 1, 1, 7) 21040.7 21074.8
+(2, 1, 1) (0, 1, 1, 7) 21051.1 21079.5
+(2, 1, 1) (1, 1, 1, 7) 21053.0 21087.2
+(1, 1, 1) (0, 1, 1, 7) 21073.6 21096.4 
+
+Selected: SARIMA(1, 1, 2)x(0, 1, 1, 7)
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+ar.L1          0.2972      0.035      8.563      0.000       0.229       0.365
+ma.L1         -0.4396      0.037    -12.008      0.000      -0.511      -0.368
+ma.L2         -0.2440      0.017    -13.958      0.000      -0.278      -0.210
+ma.S.L7       -0.9279      0.005   -195.638      0.000      -0.937      -0.919
+sigma2       883.7671     12.277     71.988      0.000     859.706     907.829
+============================================================================== 
+
+Ljung-Box test on residuals (H0: no autocorrelation)
+    lb_stat  lb_pvalue
+7     5.564      0.591
+14   18.040      0.205
+28   51.804      0.004
+Residual std 29.8; excess kurtosis 7.6 (heavy tails from price spikes)
+
+One-day-ahead forecast accuracy, test period (EUR/MWh)
+                                       MAE   RMSE  MAE vs. naive %
+SARIMA                               18.66  25.28           -15.63
+Naive (yesterday)                    22.12  29.72             0.00
+Seasonal naive (same day last week)  28.91  39.11            30.71
+Mean of last 7 days                  23.45  30.59             6.02 
+
+Diebold-Mariano tests (squared error loss): SARIMA vs. each benchmark. Negative statistic = SARIMA more accurate.
+                          benchmark  DM statistic  p-value
+                  Naive (yesterday)         -6.43      0.0
+Seasonal naive (same day last week)         -7.76      0.0
+                Mean of last 7 days         -5.05      0.0 
+
+Caveats: fixed parameters (no re-estimation) and only one-day-ahead forecasts; the grid of orders is small; the training period
+contains the 2021-22 crisis, which dominates the variance; squared-error loss is dominated by price spikes.

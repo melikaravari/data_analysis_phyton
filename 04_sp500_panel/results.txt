@@ -1,0 +1,47 @@
+Raw panel: 479 days x 708 tickers, 2019-01-02 to 2020-11-12
+Share of missing cells: 9.9%
+Step 1: dropped 176 tickers with '.' in the name (preferred shares, warrants, share classes)
+Step 2: dropped 37 tickers with more than 5% missing prices
+Step 3: forward-filled gaps up to 3 days; dropped 0 tickers with remaining gaps
+Clean panel: 495 tickers, 478 daily returns
+Step 4: returns larger than 50% in absolute value: 6
+datadate         
+2020-03-09  APA      0.77
+            OXY      0.76
+            MRO      0.63
+2020-11-09  BMYMP    0.61
+2020-03-09  FANG     0.59
+
+Share of total return variance explained (%), first 10 principal components
+PC1     49.2
+PC2      6.5
+PC3      3.3
+PC4      2.6
+PC5      1.4
+PC6      1.3
+PC7      1.2
+PC8      1.1
+PC9      0.9
+PC10     0.8
+Cumulative, first 5: 63.0%
+
+Correlation of PC1 with the equally weighted market return: 0.998  (sign of a PC is arbitrary)
+-> PC1 is the market factor.
+
+PC1 share before the COVID crash (to 2020-02-18): 26.8%
+PC1 share during the crash (2020-02-19 to 2020-04-30): 66.5%  -> correlations rise in crises
+
+Estimation window: 2019-01-03 to 2019-12-31 (255 days)
+Evaluation window: 2020-01-02 to 2020-11-12 (223 days)
+
+Min-variance portfolio holds 62 stocks with weight > 0.01%; largest weight 5.0%
+Out-of-sample performance
+                         Equal weight  Min variance
+Annualised return %             -4.17         -4.87
+Annualised volatility %         41.39         29.04
+Return/vol (rf = 0)             -0.10         -0.17
+Max drawdown %                 -41.47        -31.27
+Worst day %                    -12.77         -9.56 
+
+Caveats: (1) the panel contains only stocks that still exist in the data (survivorship bias);
+(2) the test window is dominated by one extreme event; (3) no transaction costs or rebalancing.

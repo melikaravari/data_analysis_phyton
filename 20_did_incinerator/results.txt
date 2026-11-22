@@ -1,0 +1,44 @@
+321 house sales; 1978: 179, 1981: 142; near the incinerator: 96
+
+Mean real price (USD thousand, 1978 dollars)
+                   1978   1981
+far (> 3 miles)    82.5  101.3
+near (<= 3 miles)  63.7   70.6
+Change 1978-1981: far +18.8, near +6.9; difference-in-differences = -11.9 thousand dollars
+
+In 1978 (the 'before' year) near houses were already cheaper by 18.8 thousand: levels differ between groups, and the DiD only needs trends to be parallel.
+
+Difference-in-differences estimates (coefficient on near x 1981); levels in 1978 dollars, logs in log points
+                              DiD estimate  robust SE (HC3)                  95% CI  p-value     R2
+specification                                                                                      
+(1) Levels, no controls         -11863.903         8751.105  [-29015.753, 5287.947]    0.175  0.174
+(2) Levels, with controls       -14177.934         7220.917   [-28330.672, -25.196]    0.050  0.660
+(3) Log price, no controls          -0.063            0.096         [-0.251, 0.125]    0.514  0.246
+(4) Log price, with controls        -0.093            0.064         [-0.218, 0.033]    0.150  0.730 
+
+All four estimates are negative, but only 1 of 4 reaches p < 0.05 (and that one only just: p = 0.0496); the 95% intervals are wide and in 3 of the four include zero.
+Controls matter because the mix of houses sold differs between years (see the composition check below).
+
+Cluster-robust SE by neighbourhood (7 clusters; too few for reliable cluster inference): DiD -0.093, SE 0.063, p = 0.143
+Randomisation inference (2,000 random reassignments of 'near'): observed -0.093; two-sided p = 0.067
+(This tests the sharp null of no effect for any house; it ignores that near and far houses differ systematically in 1978.)
+
+Continuous version: coefficient on post x ln(distance) = 0.036 (SE 0.059, p = 0.540); a 10% larger distance is associated with a 0.3% smaller fall in price after 1981
+
+Average house characteristics by year and group (repeated cross-section: composition can change)
+             age    area     land  rooms  baths    intst
+post treat                                              
+0    0      12.7  2074.8  52569.1    6.8    2.5  22024.4
+     1      39.8  1834.6  21839.9    6.0    1.9   6375.0
+1    0       8.5  2351.3  40251.1    6.8    2.6  19049.0
+     1      28.0  1962.3  23163.9    6.2    1.8   6725.0
+
+Average age of houses sold: 21 years in 1978 vs 14 in 1981 -> the sold houses differ between years, which is why controls matter.
+
+Note: the 'placebo' test for pre-trends is not possible with one pre-period; the variable `nearinc` is also defined by a 3-mile radius,
+so the treatment boundary is arbitrary.
+
+Caveats: only two time periods, so parallel trends cannot be tested; repeated cross-sections with a changing mix of houses; the
+treatment group is defined by a distance threshold; only 7 neighbourhoods, too few for cluster-robust standard errors; the 1978 'before' period
+may already reflect anticipation of the incinerator; 321 observations give wide confidence intervals;
+no check for spillovers (houses beyond 3 miles may also be affected).

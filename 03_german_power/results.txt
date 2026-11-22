@@ -1,0 +1,97 @@
+Sample: 2019-01-01 00:00:00 to 2026-07-22 23:00:00, 66232 hours
+Hours missing from a regular hourly grid: 8 (e.g. daylight-saving changes)
+Price summary (EUR/MWh):
+count    66240.0
+mean        95.1
+std         91.8
+min       -500.0
+25%         38.4
+50%         77.6
+75%        117.6
+max        936.3
+
+Prices by year (share_negative in %)
+       mean    std    min    max  share_negative  hours_negative
+year                                                            
+2019   37.7   15.5  -90.0  121.5             2.4             210
+2020   30.5   17.5  -83.9  200.0             3.4             298
+2021   96.8   73.7  -69.0  620.0             1.6             139
+2022  235.5  142.8  -19.0  871.0             0.8              69
+2023   95.2   47.6 -500.0  524.3             3.4             301
+2024   78.5   52.7 -135.4  936.3             5.2             457
+2025   89.3   52.1 -250.3  583.4             6.5             573
+2026   99.1   60.4 -499.0  665.8             7.0             343 
+
+Share of negative-price hours by hour of day, all years (%):
+hour
+0      1.5
+1      2.1
+2      2.5
+3      2.8
+4      2.8
+5      2.1
+6      1.7
+7      1.5
+8      1.4
+9      2.3
+10     4.5
+11     7.0
+12     9.8
+13    12.2
+14    12.0
+15     9.9
+16     6.3
+17     2.1
+18     0.5
+19     0.1
+20     0.3
+21     0.3
+22     0.2
+23     0.5 
+
+Train: 2019-01-08 to 2024-12-31 (52440 h)
+Test : 2025-01-01 to 2026-07-22 (13632 h)
+
+Out-of-sample forecast accuracy (EUR/MWh, lower is better)
+                          model   MAE  RMSE
+     Naive: same hour yesterday 27.28 43.06
+     Naive: same hour last week 34.16 52.41
+Linear (ridge): calendar + lags 24.83 37.02
+              Gradient boosting 24.56 37.02 
+
+MAE by hour of day, naive weekly vs. best model (Gradient boosting):
+    Naive: same hour last week  Gradient boosting
+0                         25.0               18.7
+1                         24.6               17.9
+2                         24.5               17.9
+3                         24.4               17.9
+4                         24.4               17.8
+5                         24.6               17.4
+6                         28.1               20.4
+7                         34.1               25.6
+8                         36.3               27.5
+9                         34.8               26.1
+10                        37.6               26.4
+11                        39.3               28.2
+12                        41.3               29.4
+13                        43.4               30.6
+14                        43.3               29.6
+15                        40.8               28.2
+16                        40.8               28.0
+17                        41.9               29.0
+18                        40.3               28.2
+19                        44.3               32.5
+20                        43.3               32.7
+21                        34.9               25.8
+22                        25.1               17.7
+23                        22.7               16.1 
+
+Daily-average forecasts, 568 complete test days (EUR/MWh)
+                                                      model   MAE  RMSE
+                      SARIMA(1,1,2)(0,1,1)7 on daily series 18.67 25.28
+Linear (ridge): calendar + lags (hourly forecasts averaged) 19.15 25.40
+              Gradient boosting (hourly forecasts averaged) 18.66 25.19
+                           Naive: yesterday's daily average 22.12 29.72 
+
+Caveat: no fundamentals (load, wind, solar, gas price) are used, so the models cannot anticipate price spikes or
+negative-price hours caused by weather. Adding such exogenous variables is the natural next step.

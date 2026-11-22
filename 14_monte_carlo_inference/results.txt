@@ -1,0 +1,68 @@
+20000 replications per cell; Monte Carlo standard error of a rejection rate near 5% is about 0.15 percentage points.
+So rates between about 4.7% and 5.3% are statistically indistinguishable from 5%.
+
+Actual size of the nominal 5% test (%), by DGP, sample size and standard error
+SE       Classical  HC3 (robust)  Newey-West (HAC)
+DGP n                                             
+A   25         5.1           5.5              11.2
+    50         4.9           4.9               8.2
+    200        4.9           5.0               6.1
+B   25        33.8           7.0              16.1
+    50        34.8           6.2              11.4
+    200       36.1           5.3               6.6
+C   25        20.7          21.1              23.2
+    50        23.4          24.0              18.8
+    200       24.8          25.2              11.9
+D   25         5.0           4.1               9.6
+    50         5.3           4.4               7.9
+    200        5.0           4.6               5.6 
+
+Average width of the 95% confidence interval
+SE       Classical  HC3 (robust)  Newey-West (HAC)
+DGP n                                             
+A   25       0.864         0.924             0.745
+    50       0.582         0.601             0.533
+    200      0.280         0.283             0.273
+B   25       1.365         2.773             2.076
+    50       0.999         2.062             1.744
+    200      0.515         1.085             1.035
+C   25       0.862         0.885             0.842
+    50       0.580         0.581             0.668
+    200      0.280         0.279             0.387
+D   25       0.799         0.840             0.682
+    50       0.546         0.551             0.491
+    200      0.272         0.269             0.261 
+
+True sampling standard deviation of the slope estimate (the quantity that a correct standard error should estimate):
+DGP  n  
+A    25     0.215
+     50     0.145
+     200    0.071
+B    25     0.730
+     50     0.551
+     200    0.286
+C    25     0.331
+     50     0.240
+     200    0.120
+D    25     0.213
+     50     0.149
+     200    0.070 
+
+Power of the 5% test at n = 50 (rejection rate, %) when the true slope is 0.5 + delta
+SE         Classical  HC3 (robust)
+DGP delta                         
+A   0.0          5.0           5.1
+    0.1         10.7          10.3
+    0.2         27.3          26.3
+    0.3         53.6          51.4
+    0.5         91.7          89.8
+B   0.0         34.3           6.2
+    0.1         35.7           6.4
+    0.2         39.4           9.2
+    0.3         43.4          12.3
+    0.5         55.4          22.2
+(delta = 0 is the size; classical power under B is not meaningful because its size is wrong.)
+
+Caveats: only a simple regression with one regressor and a few stylised DGPs; HAC with a fixed rule-of-thumb lag (no data-driven
+bandwidth); no bootstrap or fixed-b critical values, which would improve HAC in small samples; the true slope and error
+variance are fixed; results for other designs can differ.

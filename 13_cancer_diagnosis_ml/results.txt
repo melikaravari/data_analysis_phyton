@@ -1,0 +1,40 @@
+569 patients, 30 features; malignant 212 (37%), benign 357
+Features are strongly correlated: 21 of 435 feature pairs have |correlation| > 0.9 (e.g. radius, perimeter and area measure almost the same thing)
+
+Nested cross-validation (5 folds x 2 repeats; threshold 0.5; sensitivity = share of malignant cases found)
+                          ROC AUC  AUC std (folds)  sensitivity  specificity  Brier score
+model                                                                                    
+Logistic regression (L2)    0.994            0.005        0.943        0.989        0.023
+SVM (RBF kernel)            0.995            0.005        0.962        0.987        0.017
+Random forest               0.992            0.006        0.936        0.975        0.031
+Gradient boosting           0.994            0.005        0.939        0.985        0.027 
+
+Differences between the best models are small relative to the fold-to-fold spread, so with 569 patients the ranking among the
+top models should not be over-interpreted; the folds are not independent, so the standard deviations are descriptive only.
+
+Cost-sensitive thresholding (a missed cancer costs 10x a false alarm; threshold tuned on repeat 1, evaluated on repeat 2 with the same patients, so slightly optimistic)
+                   model                        rule  missed cancers  false alarms  total cost
+Logistic regression (L2)               threshold 0.5              12             5         125
+Logistic regression (L2) cost-optimal threshold 0.20               5            20          70
+        SVM (RBF kernel)               threshold 0.5               9             5          95
+        SVM (RBF kernel) cost-optimal threshold 0.28               4            11          51
+           Random forest               threshold 0.5              13            10         140
+           Random forest cost-optimal threshold 0.24               5            34          84
+       Gradient boosting               threshold 0.5              14             5         145
+       Gradient boosting cost-optimal threshold 0.06               6            29          89 
+
+Permutation importance (drop in ROC AUC when a feature is shuffled), SVM (RBF kernel), one held-out fold of 114 patients
+worst texture        0.0064
+radius error         0.0043
+perimeter error      0.0028
+compactness error    0.0025
+worst radius         0.0025
+mean texture         0.0024
+worst perimeter      0.0023
+worst area           0.0022
+Note: because of the strong correlations, shuffling one feature is partly compensated by its correlated partners, so individual
+importances are small and unstable even when the feature group matters a lot. Importance is not causal.
+
+Caveats: one small, clean, curated data set from a single source; no external validation on patients from other hospitals;
+the cost ratio is assumed; hyper-parameter grids are small; in practice calibration, fairness across patient groups and clinical
+workflow would also need checking before any real use. This project is a methodological exercise, not a diagnostic tool.

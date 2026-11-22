@@ -1,0 +1,31 @@
+Sample: 2010-01-04 to 2026-07-20, 4106 days (days with both prices; WTI <= 0 day removed)
+Spread = 100 x (log Brent - log WTI)
+
+Mean spread by year (%): 2010: 0.1, 2011: 16.2, 2012: 17.2, 2013: 10.3, 2014: 5.9, 2015: 7.0, 2016: 1.0, 2017: 6.2, 2018: 9.0, 2019: 12.1, 2020: 5.1, 2021: 4.0, 2022: 6.2, 2023: 6.1, 2024: 5.0, 2025: 5.4, 2026: 8.3
+
+ADF on the spread (H0 unit root): stat -4.33, p = 0.000
+Zivot-Andrews (one break in the mean allowed): stat -5.73, p = 0.002, estimated break 2013-03-06
+(Zivot-Andrews rejection = stationary around a mean that shifts at the break date.)
+
+Largest Chow F for a shift in the mean of the spread: 590 at 2013-04-30 (15% trimming)
+  mean spread before: 11.6%, after: 6.3%
+OLS-CUSUM test of parameter stability in the mean: stat 9.67, p = 0.0000
+(The F scan only locates the most likely single break; its p-value is not standard, so I use it for the date, not for inference.)
+
+Vector error-correction models, estimated on log prices
+--- Full sample: 4106 days, lag order (differences) chosen by AIC = 10, Johansen trace rank at 5% = 2
+    cointegrating vector (Brent = 1): Brent 1.000, WTI -1.085
+    adjustment alpha: Brent -0.0082 (t = -1.1), WTI 0.0206 (t = 2.5)
+    (negative alpha for the variable that is 'too high' when the equilibrium error is positive = it adjusts back)
+
+--- Before 2013-04-30: 831 days, lag order (differences) chosen by AIC = 2, Johansen trace rank at 5% = 0
+    no cointegration found at 5%; VECM not estimated
+
+--- From 2013-04-30: 3276 days, lag order (differences) chosen by AIC = 10, Johansen trace rank at 5% = 2
+    cointegrating vector (Brent = 1): Brent 1.000, WTI -1.027
+    adjustment alpha: Brent -0.0247 (t = -1.9), WTI 0.0313 (t = 2.2)
+    (negative alpha for the variable that is 'too high' when the equilibrium error is positive = it adjusts back)
+
+Caveats: a single mean break is searched for although the spread probably has several regimes (2011-14 discount, 2020, 2022);
+Johansen results are sensitive to lag choice and sample; the cointegration rank is estimated, not known; I did not test the
+cointegrating vector restriction (Brent = WTI, i.e. a pure spread) formally.

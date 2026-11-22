@@ -1,0 +1,46 @@
+3010 men; mean log wage 6.26; mean education 13.3 years; share growing up near a 4-year college 68%
+
+OLS: one more year of education is associated with 7.5% higher wages (SE 0.4 pp, 95% CI 6.8-8.2%)
+
+First stage: growing up near a 4-year college is associated with 0.32 more years of education (SE 0.09); F-statistic for the instrument = 14.1 (rule of thumb: > 10; Stock-Yogo 10% size critical value 16.4 for one instrument)
+Reduced form: near a 4-year college -> log wage 0.042 (SE 0.018, p = 0.016). Wald/IV ratio = 0.132
+
+Return to one year of education (log points per year)
+model                  instruments    N  return to education    SE         95% CI
+  OLS                            - 3010                0.075 0.004 [0.068, 0.082]
+ 2SLS                       nearc4 3010                0.132 0.054 [0.026, 0.237]
+ 2SLS              nearc4 + nearc2 3010                0.157 0.052 [0.054, 0.260]
+ 2SLS          fatheduc + motheduc 2220                0.102 0.013 [0.076, 0.128]
+ 2SLS nearc4 + fatheduc + motheduc 2220                0.101 0.013 [0.076, 0.127] 
+
+The 2SLS estimate with nearc4 is clearly larger than the OLS estimate (0.13 vs 0.08) but has a much wider confidence interval. Explanations: (i) measurement error
+in schooling attenuates OLS; (ii) the IV estimates a local effect for men whose schooling responds to college proximity (often high-return, credit-
+constrained men), not the average effect (LATE); (iii) the instrument may be imperfectly exogenous. These cannot be separated with these data.
+
+Wu-Hausman test of exogeneity of education (nearc4 as instrument): statistic 1.17, p = 0.280  (low power here: IV is imprecise, so OLS cannot be rejected formally although the point estimates differ)
+Over-identification test, nearc4 + nearc2: Sargan statistic 1.25, p = 0.264
+Over-identification test, nearc4 + father's + mother's education: Sargan 2.11, p = 0.348
+Parental education is a very strong instrument (F > 200) but is the least credible one: family background probably affects wages directly, so its estimate (about 0.10) is not trusted more than the college-proximity one.
+Failing to reject is reassuring but not proof: the test is only valid if at least one instrument is valid, and has limited power.
+  First-stage partial F for instruments ('nearc4',): 14.2
+  First-stage partial F for instruments ('nearc4', 'nearc2'): 16.7
+  First-stage partial F for instruments ('fatheduc', 'motheduc'): 221.0
+  First-stage partial F for instruments ('nearc4', 'fatheduc', 'motheduc'): 227.3
+
+Anderson-Rubin 95% confidence set for the return to education (nearc4): [0.03, 0.28] (2SLS: [0.03, 0.24])
+
+Balance of predetermined characteristics by proximity to a 4-year college (difference near - not near)
+variable  mean near  mean not near  difference  p-value    N
+fatheduc     10.357          9.222       1.135    0.000 2320
+motheduc     10.533          9.940       0.594    0.000 2657
+      IQ    103.207        100.611       2.596    0.001 2061
+     KWW     34.489         31.515       2.974    0.000 2963
+   black      0.212          0.280      -0.068    0.000 3010
+  smsa66      0.799          0.328       0.471    0.000 3010
+ south66      0.329          0.598      -0.269    0.000 3010
+After controlling for region and urban location: IQ difference 0.67 points (p = 0.321). Raw differences in ability and family background between near and far men suggest the instrument may not be randomly assigned;
+the controls absorb part of this. This is the main threat to the IV result.
+
+Caveats: the exclusion restriction (proximity affects wages only through schooling) cannot be tested directly; urban areas near colleges may have
+different labour markets; the data are from 1976 for one cohort of men, so the result may not hold today or for women; the sample with parental
+education is smaller and selected; IV estimates are local effects; confidence intervals are wide.

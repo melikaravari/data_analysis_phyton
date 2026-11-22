@@ -1,0 +1,27 @@
+Clean panel: 491 stocks, 478 daily returns, 2019-01-03 to 2020-11-12
+Estimation (2019): 255 days; evaluation (2020): 223 days
+
+Beta stability, 2019 vs 2020 (OLS betas on the equally weighted market)
+  mean beta 2019: 1.00 (std 0.49); mean beta 2020: 1.00 (std 0.38)
+  correlation between 2019 and 2020 betas: 0.46; R2 of beta2020 on beta2019: 0.22
+  slope 0.37 (a slope below 1 means betas regress toward the cross-sectional mean)
+  share of stocks whose beta moved by more than 0.3: 49%
+
+Cumulative return (%) of equally weighted quintile portfolios formed on 2019 beta (Q1 = lowest beta, Q5 = highest)
+                                      Q1    Q2    Q3    Q4    Q5  Market (EW)
+Crash (2020-02-19 to 2020-03-23)   -33.6 -36.2 -40.9 -43.1 -48.6        -40.7
+Rebound (2020-03-24 to 2020-06-08)  38.1  46.6  54.9  63.7  71.4         54.5
+Rest of 2020 (after 2020-06-08)      2.8   3.6   1.8   7.2   6.1          4.2
+Whole of 2020                       -0.7   0.9  -4.6  -1.3  -9.7         -3.1 
+
+Fama-MacBeth: average daily slope on 2019 beta (% per day per unit of beta), Newey-West t-statistics (5 lags)
+       period  days  avg slope on beta  t-stat  avg market return, %/day
+Whole of 2020   223             -0.018   -0.20                    -0.014
+        Crash    24             -0.740   -1.85                    -2.177
+      Rebound    54              0.293    1.43                     0.805
+ Rest of 2020   112              0.035    0.47                     0.037
+The slope on beta should track the market's return if beta is rewarded: positive when the market rises, negative when it falls.
+
+Caveats: the market proxy is equally weighted, so betas differ from betas against a value-weighted index; the sample contains only
+surviving stocks and one extreme episode; the Fama-MacBeth sample is 2020 only (about 220 days), so the average slope over the
+whole year is a noisy estimate; no size, value or momentum controls; daily portfolios are rebalanced each day (a simplification).

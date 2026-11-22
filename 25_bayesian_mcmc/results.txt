@@ -1,0 +1,61 @@
+======================================================================
+PART A: hierarchical model for eight schools (Gibbs + Metropolis, written from scratch)
+======================================================================
+Sampler: 4 chains x 25,000 draws after 5,000 warm-up; Metropolis acceptance rate for tau 37%
+Convergence diagnostics (R-hat should be below 1.01; ESS = effective number of independent draws)
+parameter  R-hat      ESS
+       mu  1.001 2147.133
+      tau  1.003 1063.395
+  theta_1  1.000 3176.567
+  theta_8  1.000 3825.895 
+
+Effect of coaching by school: raw estimates versus partial-pooling posterior means
+          no pooling (y_j)  partial pooling: posterior mean  posterior SD 95% interval
+school 1              28.0                              9.2           6.1     [-2, 23]
+school 2               8.0                              7.7           5.2     [-3, 18]
+school 3              -3.0                              7.0           5.8     [-5, 18]
+school 4               7.0                              7.6           5.4     [-3, 18]
+school 5              -1.0                              6.3           5.3     [-5, 16]
+school 6               1.0                              6.9           5.4     [-4, 17]
+school 7              18.0                              9.1           5.5     [-1, 21]
+school 8              12.0                              7.9           5.9     [-4, 20]
+Complete pooling (all schools identical): 7.7 points. Posterior of mu: mean 7.7, 95% interval [-1.0, 16.6]; posterior of tau: median 2.8, 95% interval [0.1, 11.8]
+P(school 1 has the largest effect) = 0.20; P(effect of school 1 > effect of school 3) = 0.62
+The raw estimate of school 1 (28 points) is shrunk strongly toward the mean: the data cannot distinguish a real difference from sampling noise.
+
+Prior sensitivity: the data (8 schools) carry little information about tau, so the prior matters
+                        prior on tau  tau median tau 95% interval  theta_1 mean  mu mean  R-hat tau  ESS tau
+                   half-Cauchy(0, 5)        2.75      [0.1, 11.8]          9.24     7.73       1.00  1063.39
+                      uniform(0, 30)        5.23      [0.2, 19.6]         11.23     7.82       1.00  1177.11
+                  half-normal(0, 10)        4.08      [0.2, 14.0]         10.11     7.79       1.00   767.36
+inverse-gamma(0.001, 0.001) on tau^2        0.59      [0.0, 10.5]          8.31     7.57       1.01   572.72
+The posterior median of tau ranges from 0.6 (inverse-gamma(0.001, 0.001) on tau^2) to 5.2 (uniform(0, 30)), and the posterior mean of theta_1 from 8.3 to 11.2. The inverse-gamma(0.001) prior is often called 'non-informative' but here it puts most weight near tau = 0 and gives the strongest shrinkage (Gelman 2006 warns about this); the uniform prior gives the weakest.
+
+======================================================================
+PART B: Bayesian regression for log wage (Card data)
+======================================================================
+3010 men; Gibbs sampler, 5,000 retained draws after 1,000 warm-up; weakly informative priors N(0, 10^2) on all coefficients
+coefficient    OLS       OLS 95% CI  Bayes mean (weak prior) 95% credible interval  Bayes mean (strong prior on educ)
+  intercept  4.734   [4.601, 4.866]                    4.733        [4.597, 4.867]                              4.867
+       educ  0.074   [0.067, 0.081]                    0.074        [0.067, 0.081]                              0.066
+      exper  0.084   [0.071, 0.097]                    0.084        [0.070, 0.097]                              0.080
+    expersq -0.002 [-0.003, -0.002]                   -0.002      [-0.003, -0.002]                             -0.002
+      black -0.190 [-0.224, -0.155]                   -0.190      [-0.224, -0.154]                             -0.198
+       smsa  0.161   [0.131, 0.192]                    0.162        [0.132, 0.192]                              0.166
+      south -0.125 [-0.154, -0.095]                   -0.125      [-0.154, -0.096]                             -0.128
+Posterior sd of the residual: 0.374 (OLS 0.374). With weak priors and n = 3,010 the Bayesian and OLS answers coincide.
+Strong prior on the education coefficient (0.05 +- 0.005): the posterior mean is 0.066, a compromise between the prior (0.050) and the data (OLS 0.074, se 0.004); a prior this tight is as informative as the data themselves.
+Posterior probabilities: P(return to education > 8%) = 0.05; P(black coefficient < -0.15) = 0.99
+
+Posterior predictive checks (p near 0 or 1 = the model does not reproduce this feature of the data)
+            test statistic  observed  replicated mean  posterior predictive p
+       minimum of log wage     4.605            4.664                   0.700
+      skewness of log wage    -0.156           -0.028                   0.998
+SD of log wage, educ <= 11     0.424            0.430                   0.672
+SD of log wage, educ >= 16     0.433            0.430                   0.410
+Features the model does not reproduce: skewness of log wage. The observed wages are more negatively skewed than the normal model implies (a left tail of very low wages), so the normal-error assumption is imperfect; the coefficients are still informative but predictive intervals in the left tail would be too optimistic.
+
+Caveats: (A) eight observations carry almost no information about tau, so results depend on the prior; the Gibbs sampler mixes slowly near tau = 0 and
+modern samplers (Hamiltonian Monte Carlo with a non-centred parametrisation) work better; the normal-normal model assumes known standard errors.
+(B) a normal linear model with constant variance for log wages; the checks above indicate which features it misses; priors are subjective choices;
+the regression is descriptive (see project 21 for the endogeneity of education).

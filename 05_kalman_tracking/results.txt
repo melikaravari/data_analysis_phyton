@@ -1,0 +1,22 @@
+Estimated time step dt = 0.1000 (from position increments / velocity)
+Acceleration columns constant? ax std = 4.5e-05, ay std = 4.0e-05
+Measurement errors (y_sim - true position): mean [-0.08 -0.03], std [0.82 1.  ]
+Shapiro-Wilk normality p-values of the errors: [np.float64(0.261), np.float64(0.393)]
+
+Constant-acceleration: ML estimates q = 6.33e-15, measurement std = 0.92, log-likelihood = -217.2
+Constant-velocity (misspecified): ML estimates q = 22, measurement std = 0.90, log-likelihood = -226.9
+
+True measurement noise std (from data): 0.82 / 1.00
+
+Position RMSE and velocity RMSE against the true trajectory (position units / velocity units)
+model                                               pos all  pos >=10  vel all  vel >=10
+Raw measurements                                       0.92      0.94        -        -
+Kalman filter, Constant-acceleration                   0.54      0.47     9.16     1.01
+Kalman smoother, Constant-acceleration                 0.16      0.14     0.24     0.21
+Kalman filter, Constant-velocity (misspecified)        0.63      0.64     9.13     2.23
+Kalman smoother, Constant-velocity (misspecified)      0.31      0.32     0.83     0.84
+
+Diagnostics, constant-acceleration model (innovations after the first 5 steps)
+  standardised innovation std (x, y): [0.9  1.12]  (should be about 1)
+  mean normalised innovation squared: 2.06  (should be about 2 = number of measurements)
+  lag-1 autocorrelation of innovations: [ 0.17 -0.03]  (should be about 0)
